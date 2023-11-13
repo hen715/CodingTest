@@ -3,19 +3,29 @@ import java.util.Scanner;
 public class Main {
 
     public static int Z(double num,int r, int c,int sum){
-        if (num == 1) {
+        
+        double n=num-1;
+        if(r==0&&c==0)
             return sum;
+        else if(r==0&&c==1)
+            return sum+1;
+        else if(r==0&&c==1)
+            return  sum+2;
+        else if(r==1&&c==1)
+            return sum+3;
+        if(r<n/2&&c<n/2){
+              return Z(num/2,r,c,sum+((int)(num/2)*(int)(num/2))*0);
         }
-
-        if (r < num / 2 && c < num / 2) {
-            return Z(num / 2, r, c, sum);
-        } else if (r < num / 2 && c >= num / 2) {
-            return Z(num / 2, r, c - (int) (num / 2), sum + ((int) (num / 2) * (int) (num / 2)) * 1);
-        } else if (r >= num / 2 && c < num / 2) {
-            return Z(num / 2, r - (int) (num / 2), c, sum + ((int) (num / 2) * (int) (num / 2)) * 2);
-        } else {
-            return Z(num / 2, r - (int) (num / 2), c - (int) (num / 2), sum + ((int) (num / 2) * (int) (num / 2)) * 3);
+        if(r<n/2&&c>n/2){
+             return Z(num/2,r,c-(int)num/2,sum+((int)(num/2)*(int)(num/2))*1);
         }
+        if(r>n/2&&c<n/2){
+             return Z(num/2,r-(int)num/2,c,sum+((int)(num/2)*(int)(num/2))*2);
+            }
+         if(r>n/2&&c>n/2){
+            return Z(num/2,r-(int)num/2,c-(int)num/2,sum+((int)(num/2)*(int)(num/2))*3);
+      }
+         return sum;
     }
 
 
@@ -28,7 +38,7 @@ public class Main {
 
         double num = Math.pow(2,n);
 
-        System.out.println(Z(num,r,c,0));
+        System.out.print(Z(num,r,c,0));
     }
 
 
