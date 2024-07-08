@@ -12,9 +12,13 @@ public class Main {
         String s = br.readLine();
         BigInteger sum = BigInteger.ZERO;
         for(int i = 0 ; i < s.length();i++){
-            BigInteger b = BigInteger.valueOf((long) ((s.charAt(i)-96)*Math.pow(31,i)));
+            BigInteger b = BigInteger.valueOf((s.charAt(i)-96));
+            BigInteger c = BigInteger.valueOf(31);
+            c = c.pow(i);
+            b = b.multiply(c);
             sum = sum.add(b);
         }
+        sum = sum.mod( BigInteger.valueOf(1234567891));
         System.out.println(sum);
 
     }
