@@ -17,8 +17,8 @@ class Main {
         int point = 0;
         for(int i = 0 ; i < M ; i++){
             s = br.readLine().split(" ");
-            int start = Math.min(Integer.parseInt(s[0]),Integer.parseInt(s[1]));
-            int end = Math.max(Integer.parseInt(s[0]),Integer.parseInt(s[1]));
+            int start = Integer.parseInt(s[0]);
+            int end = Integer.parseInt(s[1]);
             if(point!=0){
                 continue;
             }
