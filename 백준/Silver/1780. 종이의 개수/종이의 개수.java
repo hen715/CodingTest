@@ -23,31 +23,25 @@ class Main {
     }
 
     public static void cut(int x, int y, int size){
-        int c1 = 0;
-        int c2 = 0;
-        int c3 = 0;
+        boolean isSame = true;
         for(int i = x ; i < size + x ; i++){
             for(int j = y; j < size + y ; j++){
-                if(list[i][j]==-1) {
-                    c1++;
-                }
-                else if(list[i][j]==0){
-                    c2++;
-                }
-                else{
-                    c3++;
+                if(list[i][j]!=list[x][y]){
+                    isSame = false;
+                    break;
                 }
             }
         }
-        if(c1==size*size){
-            count1++;
-            return;
-        }
-        if(c2==size*size){
-            count2++;
-            return;
-        }if(c3==size*size){
-            count3++;
+        if(isSame){
+            if(list[x][y]==-1){
+                count1++;
+            }
+            else if(list[x][y]==0){
+                count2++;
+            }
+            else{
+                count3++;
+            }
             return;
         }
         for(int i = 0 ; i < 3 ; i++){
