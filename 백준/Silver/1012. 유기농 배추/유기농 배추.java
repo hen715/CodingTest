@@ -1,59 +1,70 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Main {
-
-    public static void dfs(int x, int y, int[][] g, int[][] visited,int m, int n){
-        visited[x][y] = 1;
-        if(x-1>=0&&g[x-1][y]==1&&visited[x-1][y]==0){
-            dfs(x-1,y,g,visited,m,n);
-        }
-        if(y-1>=0&&g[x][y-1]==1&&visited[x][y-1]==0){
-            dfs(x,y-1,g,visited,m,n);
-        }
-        if(x+1<m&&g[x+1][y]==1&&visited[x+1][y]==0){
-            dfs(x+1,y,g,visited,m,n);
-        }
-        if(y+1<n&&g[x][y+1]==1&&visited[x][y+1]==0){
-            dfs(x,y+1,g,visited,m,n);
+    public static boolean[][] list;
+    public static int N;
+    public static int M;
+    public static int K;
+    public static int[] dx = {1,-1,0,0};
+    public static int[] dy = {0,0,1,-1};
+    public static class Node{
+        int x;
+        int y;
+        public Node(int x, int y){
+            this.x = x;
+            this.y = y;
         }
     }
 
-    public static void main(String[] args){
-        Scanner scanner = new Scanner(System.in);
-        int b = scanner.nextInt();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
-        for(int i = 0 ; i<b;i++){
-            int m = scanner.nextInt();
-            int n = scanner.nextInt();
-            int k = scanner.nextInt();
-            int[][] g = new int[m][n];
-            int[][] visited = new int[m][n];
-            for(int c = 0 ; c < m ; c++) {
-                for (int d = 0; d < n; d++) {
-                    g[c][d] = 0;
-                    visited[c][d] = 0;
-                }
-            }
-            for(int j = 0 ; j<k;j++){
-                int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                g[x][y] = 1;
+        String[] s;
+        for(int t = 0 ; t < T ; t++){
+            s = br.readLine().split(" ");
+            M = Integer.parseInt(s[0]);
+            N = Integer.parseInt(s[1]);
+            K = Integer.parseInt(s[2]);
+            list = new boolean[N][M];
+            for(int i = 0 ; i < K ; i++){
+                s = br.readLine().split(" ");
+                list[Integer.parseInt(s[1])][Integer.parseInt(s[0])] = true;
             }
             int count = 0;
-            for(int x1 = 0 ; x1 < m;x1++){
-                for(int y1 = 0 ; y1 < n ; y1++){
-                    if(visited[x1][y1]==0&&g[x1][y1]==1){
-                        visited[x1][y1]=1;
-                        dfs(x1,y1,g,visited,m,n);
+            for(int i = 0 ; i < N ; i++){
+                for(int j = 0 ; j < M ; j++){
+                    if(list[i][j]){
                         count++;
+                        bfs(i,j);
                     }
                 }
             }
             sb.append(count);
-            sb.append("\n");
+            if(t!=T-1){
+                sb.append("\n");
+            }
         }
-        System.out.println(sb);
+        System.out.print(sb);
     }
-
-
+    public static void bfs(int x, int y){
+        Queue<Node> q = new LinkedList<>();
+        q.add(new Node(x,y));
+        while (!q.isEmpty()){
+            Node now = q.poll();
+            for(int i = 0 ; i < 4 ; i++){
+                int ddx = now.x + dx[i];
+                int ddy = now.y + dy[i];
+                if(ddx>=0&&ddx<N&&ddy>=0&&ddy<M&&list[ddx][ddy]){
+                    list[ddx][ddy] = false;
+                    q.add(new Node(ddx,ddy));
+                }
+            }
+        }
+    }
 }
