@@ -32,8 +32,8 @@ public class Main {
             for (int j = M - 1 - layer; j > layer; j--) layerList.add(list[N - 1 - layer][j]);
             for (int i = N - 1 - layer; i > layer; i--) layerList.add(list[i][layer]);
 
-            int r = R % layerList.size();
-            Collections.rotate(layerList, -r);
+            //int r = R % layerList.size();
+            Collections.rotate(layerList, -R);
 
             int index = 0;
             for (int j = layer; j < M - 1 - layer; j++) list[layer][j] = layerList.get(index++);
@@ -51,6 +51,4 @@ public class Main {
         }
         System.out.print(sb);
     }
-
-
 }
