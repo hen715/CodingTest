@@ -22,7 +22,7 @@ public class Solution {
             }
             count = 0;
 
-            dfs(0,0,0,new boolean[N]);
+            dfs(0,new boolean[N], new int[N]);
 
             sb.append('#').append(t).append(' ').append(count);
             if(t!=T) {
@@ -32,23 +32,29 @@ public class Solution {
         System.out.print(sb);
     }
 
-    public static void dfs(int depth, int left, int right, boolean[] visit){
+    public static void dfs(int depth, boolean[] visit, int[] selected){
         if(depth==N){
-            count++;
+            c(selected,0,0,0);
             return;
         }
         for(int i = 0 ; i <N ; i++){
             if(!visit[i]){
                 visit[i] = true;
-                dfs(depth + 1,left + list[i],right,visit);
-                if(left >= right + list[i]){
-                    dfs(depth + 1,left,right+list[i],visit);
-                }
+                selected[depth] = list[i];
+                dfs(depth + 1,visit,selected);
                 visit[i] = false;
             }
         }
-
     }
-
-
+    public static void c(int[] selected, int left, int right, int depth){
+        if(left<right){
+            return;
+        }
+        if(depth==N){
+            count++;
+            return;
+        }
+        c(selected,left+selected[depth],right,depth+1);
+        c(selected,left,right+selected[depth],depth+1);
+    }
 }
