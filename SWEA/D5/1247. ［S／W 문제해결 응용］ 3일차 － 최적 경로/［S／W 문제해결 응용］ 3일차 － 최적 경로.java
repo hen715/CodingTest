@@ -6,8 +6,9 @@ class Solution
 {
     static int min;
     static List<HashMap<Integer,Integer>> list;
-    static boolean[] visit;
+    static int visit;
     static int N;
+    static int[][] dp;
     public static void main(String[] args) throws Exception
     {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,38 +32,37 @@ class Solution
                     list.get(j).put(i,dis);
                 }
             }
-            visit = new boolean[N + 2];
-            int[] route = new int[N];
+            dp = new int[1<<N+2][N+2];
+            for(int i = 0 ; i < (1<<N+2) ; i++){
+                for(int j = 0 ; j < N +2 ; j++)
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+            visit = 0;
             min = Integer.MAX_VALUE;
-            search(0,route);
+            search(0,0,0);
 
             sb.append('#').append(tc).append(' ').append(min).append('\n');
         }
         System.out.print(sb);
     }
 
-    static void search(int depth, int[] route){
+    static void search(int depth, int sum,int past){
+        if(dp[visit][past]<=sum){
+            return;
+        }
+        dp[visit][past] = sum;
         if(depth==N){
-            calc(route);
+            sum += list.get(past).get(1);
+            min = Math.min(min,sum);
             return;
         }
         for(int i = 2 ; i < 2 + N ; i++){
-            if(!visit[i]){
-                visit[i] = true;
-                route[depth] = i;
-                search(depth+1,route);
-                visit[i] = false;
+            if((visit&(1<<i))!=(1<<i)){
+                visit |= (1<<i);
+                int s = list.get(past).get(i);
+                search(depth+1,sum + s,i);
+                visit &= ~(1<<i);
             }
         }
-    }
-    static void calc(int[] route){
-        //System.out.println(Arrays.toString(route));
-        int sum = 0;
-        sum += list.get(0).get(route[0]);
-        for(int i = 0 ; i < N - 1 ; i++){
-            sum += list.get(route[i]).get(route[i+1]);
-        }
-        sum +=list.get(route[N-1]).get(1);
-        min = Math.min(min,sum);
     }
 }
