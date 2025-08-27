@@ -46,20 +46,21 @@ public class Main {
                 list[i][j] = Integer.parseInt(s[j]);
             }
         }
+        // 각 섬에 번호 부여
         visit = new boolean[N][M];
         for(int i = 0 ; i < N ; i++){
             for(int j = 0 ; j < M ; j++){
                 if(!visit[i][j]&&list[i][j]==1){
-                    landNum++;
                     setLandNum(i,j);
                 }
             }
         }
+
+        // 다리 만들기
         bridges = new ArrayList<>();
         for(int i = 0 ; i <=landNum ; i++){
             bridges.add(new ArrayList<>());
         }
-        pq = new PriorityQueue<>((o1,o2)->o1.cost-o2.cost);
         for(int i = 0 ; i < N ; i++){
             for(int j = 0 ; j < M ; j++){
                 if(list[i][j]!=0) {
@@ -67,6 +68,9 @@ public class Main {
                 }
             }
         }
+
+        // 모든 섬을 연결하는 다리 최솟값 구하기
+        pq = new PriorityQueue<>((o1,o2)->o1.cost-o2.cost);
         boolean[] v = new boolean[landNum + 1];
         point: for(int i = 0 ; i < N ; i++){
             for(int j = 0 ; j < M ; j++){
@@ -90,70 +94,43 @@ public class Main {
                 }
             }
         }
+
+        // 출력
+        // 방문하지 않은 섬이 있다면 -1 출력
+        int result = cost;
         for(int i = 1 ; i <=landNum ; i++){
             if (!v[i]){
-                System.out.print(-1);
-                System.exit(0);
+               result = -1;
+               break;
             }
         }
-        if(cost==0){
-            System.out.println(-1);
-        }
-        else {
-            System.out.print(cost);
-        }
-
+        System.out.print(result);
     }
 
-    public static void makeBridge(int x, int y){
-        for(int i = 0 ; i < 4 ; i++){
-            int ddx = x +dx[i];
-            int ddy = y +dy[i];
+    public static void makeBridge(int x, int y) {
+        for (int i = 0; i < 4; i++) {
+            int ddx = x + dx[i];
+            int ddy = y + dy[i];
             int count = 0;
-            if(i==0){
-                while (ddx<N&&list[ddx][ddy]==0){
-                    count++;
-                    ddx++;
-                }
-                if(ddx!=N&&count>1){
-                    bridges.get(list[x][y]).add(new Bridge(list[ddx][ddy], count));
-                    bridges.get(list[ddx][ddy]).add(new Bridge(list[x][y], count));
-                }
+
+            while (ddx >= 0 && ddx < N && ddy >= 0 && ddy < M && list[ddx][ddy] == 0) {
+                count++;
+                ddx += dx[i];
+                ddy += dy[i];
             }
-            if(i==1){
-                while (ddx>=0&&list[ddx][ddy]==0){
-                    count++;
-                    ddx--;
-                }
-                if(ddx>=0&&count>1){
-                    bridges.get(list[x][y]).add(new Bridge(list[ddx][ddy], count));
-                    bridges.get(list[ddx][ddy]).add(new Bridge(list[x][y], count));
-                }
-            }
-            if(i==2){
-                while (ddy<M&&list[ddx][ddy]==0){
-                    count++;
-                    ddy++;
-                }
-                if(ddy!=M&&count>1){
-                    bridges.get(list[x][y]).add(new Bridge(list[ddx][ddy], count));
-                    bridges.get(list[ddx][ddy]).add(new Bridge(list[x][y], count));
-                }
-            }
-            if(i==3){
-                while (ddy>=0&&list[ddx][ddy]==0){
-                    count++;
-                    ddy--;
-                }
-                if(ddy>=0&&count>1){
-                    bridges.get(list[x][y]).add(new Bridge(list[ddx][ddy], count));
-                    bridges.get(list[ddx][ddy]).add(new Bridge(list[x][y], count));
-                }
+
+            if (ddx >= 0 && ddx < N && ddy >= 0 && ddy < M && count > 1) {
+                int from = list[x][y];
+                int to = list[ddx][ddy];
+                bridges.get(from).add(new Bridge(to, count));
+                bridges.get(to).add(new Bridge(from, count));
             }
         }
     }
+
 
     public static void setLandNum(int x, int y){
+        landNum++;
         Queue<Node> q = new LinkedList<>();
         q.add(new Node(x,y));
         list[x][y] = landNum;
